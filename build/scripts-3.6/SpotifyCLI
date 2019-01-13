@@ -1,0 +1,4 @@
+#!python
+
+import SpotifyCLI
+# SpotifyCLI.main()
