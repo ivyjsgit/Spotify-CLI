@@ -3,7 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 import spotipy.client as client
-
+import configparser
 
 ''' shows the albums and tracks for a given artist.
 '''
@@ -49,27 +49,62 @@ def get_uri_from_album(albumuri):
 	# sp.start_playback(context_uri=ourAlbum.get('uri'))
 	return(ourAlbum.get('uri'))
 
-scope = 'user-modify-playback-state'
-username = ''
-client_id = ''
-client_secret = ''
-token = util.prompt_for_user_token(username, scope, client_id=client_id,
-                                   client_secret=client_secret, redirect_uri='http://localhost/')
+
+def get_uri_from_track(track_uri):
+	ourTrack = sp.track(track_uri)
+	# print(ourTrack.get('uri'))
+	# sp.start_playback(context_uri=ourTrack.get('uri'))
+	return (ourTrack.get('uri'))
+	
+def show_arist_songs(artist):
+	songs = []
+	uris = []
+	results = sp.artist_top_tracks(artist['id'])
+	# print(results)
+	# print(results['tracks'][1]['name'])
+	
+	for count in range(1, 10):
+		songs.append(results['tracks'][count]['name'])
+		uris.append(results['tracks'][count]['uri'])
+	count = 0
+	for song in songs:
+		print('(' + str(count) + ') ' + song )
+		count +=1
+	selection = int(input("Selection: "))
+	selectedURI = uris[selection]
+	ourID = get_uri_from_track(selectedURI)
+	sp.start_playback(uris=[ourID])
+
+def search_songs(query):
+	songs = []
+	uris = []
+	results = sp.search(query, limit=10)
+	for count in range(1, 10):
+		songs.append(results['tracks']['items'][count]['name'])
+		uris.append(results['tracks']['items'][count]['uri'])
+	count = 0
+	for song in songs:
+		print('(' + str(count) + ') ' + song)
+		count += 1
+	selection = int(input("Selection: "))
+	selectedURI = uris[selection]
+	# print(selectedURI)
+	ourID = get_uri_from_track(selectedURI)
+	sp.start_playback(uris=[ourID])
+config = configparser.ConfigParser()
+config.read('config.ini')
+ourClientID = config['KEYS']['client_id']
+ourSecret = config['KEYS']['client_secret']
+ourUsername = config['KEYS']['username']
+scope = 'user-modify-playback-state user-read-playback-state'
+token = util.prompt_for_user_token(ourUsername, scope, client_id=ourClientID,
+                                   client_secret=ourSecret, redirect_uri='http://localhost/')
 
 sp = spotipy.Spotify(auth=token)
-
-ourAlbum = sp.album('spotify:album:04EajKw866bzJn3EW8HOdQ')
-album_name = ourAlbum.get('name')
-# sp.start_playback(context_uri=ourAlbum.get('uri'))
-print(ourAlbum.get('uri'))
-print(album_name)
-
-# sp.start_playback(uris='spotify:album:04EajKw866bzJn3EW8HOdQ')
-
 if len(sys.argv) < 2:
 	print(('Usage: {0} artist name'.format(sys.argv[0])))
 else:
-	if(sys.argv[1]) == '-a':
+	if(sys.argv[1]) == '-album':
 		name = ' '.join(sys.argv[2:])
 		artist = get_artist(name)
 		if artist:
@@ -80,3 +115,17 @@ else:
 		sp.next_track()
 	elif (sys.argv[1]) == '-b':
 		sp.previous_track()
+	elif (sys.argv[1]) == '-p':
+		if (sp.current_playback()['is_playing']):
+			sp.pause_playback()
+		else:
+			sp.start_playback()
+	elif (sys.argv[1]) == '-artist':
+		name = ' '.join(sys.argv[2:])
+		artist = get_artist(name)
+		# print(artist)
+		# artist = 'spotify:artist:1R84VlXnFFULOsWWV8IrCQ'
+		show_arist_songs(artist)
+	elif (sys.argv[1]) == '-song':
+		name = ' '.join(sys.argv[2:])
+		search_songs(name)
