@@ -12,7 +12,7 @@ You MUST manually [update Spotipy for it to work.](https://stackoverflow.com/que
 
 -b: Back
 
--o: Toggle music playback
+-p: Toggle music playback
 
 -artist: Pull up top songs by artist
 
