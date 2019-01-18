@@ -99,13 +99,12 @@ def search_songs(query):
 	uris = []
 	artists = []
 	results = sp.search(query, limit=10)
-	artist = results['tracks']['items'][1]['artists'][0]['name']
-	print(artist)
-	for count in range(1, 10):
+	for count in range(0, len(results['tracks']['items'])):
 		artists.append(results['tracks']['items'][count]['artists'][0]['name'])
 		songs.append(results['tracks']['items'][count]['name'])
 		uris.append(results['tracks']['items'][count]['uri'])
 	count = 0
+	# print(artists)
 	for song in songs:
 		print('(' + str(count) + ') ' + song + ": " + artists[count])
 		count += 1
