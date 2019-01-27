@@ -3,8 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 import spotipy.client as client
-import configparser
-
+import os
 ''' shows the albums and tracks for a given artist.
 '''
 
@@ -114,11 +113,9 @@ def search_songs(query):
 	ourID = get_uri_from_track(selectedURI)
 	sp.start_playback(uris=[ourID])
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-ourClientID = config['KEYS']['client_id']
-ourSecret = config['KEYS']['client_secret']
-ourUsername = config['KEYS']['username']
+ourClientID = os.environ["SpotifyClientID"]
+ourSecret = os.environ["SpotifyClientSecret"]
+ourUsername = os.environ["SpotifyUsername"]
 scope = 'user-modify-playback-state user-read-playback-state'
 token = util.prompt_for_user_token(ourUsername, scope, client_id=ourClientID,
 							client_secret=ourSecret, redirect_uri='http://localhost/')
