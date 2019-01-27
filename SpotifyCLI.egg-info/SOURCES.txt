@@ -4,5 +4,6 @@ SpotifyCLI/__init__.py
 SpotifyCLI.egg-info/PKG-INFO
 SpotifyCLI.egg-info/SOURCES.txt
 SpotifyCLI.egg-info/dependency_links.txt
+SpotifyCLI.egg-info/requires.txt
 SpotifyCLI.egg-info/top_level.txt
 bin/SpotifyCLI

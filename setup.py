@@ -1,16 +1,16 @@
 import setuptools
-import configparser
-
-config = configparser.ConfigParser()
-config ['KEYS']={'client_id':'','client_secret':'','username':''}
-with open('config.ini', 'w') as configfile:
-    config.write(configfile)
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
+    install_requires=[
+        'spotipy'
+    ],
+    dependency_links=[
+        'git+https://github.com/plamere/spotipy.git#egg=spotipy'
+    ],
     name="SpotifyCLI",
-    version="0.0.9",
+    version="0.1.1.4",
     author="Ivy Jackson",
     author_email="ivyjs@hendrix.edu",
     description="This program controls Spotify!",
@@ -20,7 +20,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     scripts=['bin/SpotifyCLI'],
