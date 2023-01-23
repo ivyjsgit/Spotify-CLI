@@ -2,4 +2,4 @@
 # https://github.com/damnever/pigar
 
 # spotify.py: 2,3,4,5
-spotipy == 2.4.4
+spotipy == 2.22.1
